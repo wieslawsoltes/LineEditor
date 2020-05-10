@@ -402,7 +402,7 @@ namespace LineEditor
         }
     }
 
-    public class SelectionEditor : IDisposable
+    public class SelectionTool : IDisposable
     {
         [Flags]
         private enum State
@@ -440,7 +440,7 @@ namespace LineEditor
             }
         }
 
-        public SelectionEditor(CanvasShape drawingCanvas, CanvasShape boundsCanvas)
+        public SelectionTool(CanvasShape drawingCanvas, CanvasShape boundsCanvas)
         {
             _drawingCanvas = drawingCanvas;
             _boundsCanvas = boundsCanvas;
@@ -662,7 +662,7 @@ namespace LineEditor
         }
     }
 
-    public class LineEditor : IDisposable
+    public class LineTool : IDisposable
     {
         private enum State { None, Start, End }
         private State _state = State.None;
@@ -674,7 +674,7 @@ namespace LineEditor
 
         public bool IsEnabled { get; set; }
 
-        public LineEditor(CanvasShape drawingCanvas, CanvasShape boundsCanvas)
+        public LineTool(CanvasShape drawingCanvas, CanvasShape boundsCanvas)
         {
             _drawingCanvas = drawingCanvas;
             _boundsCanvas = boundsCanvas;
@@ -739,9 +739,9 @@ namespace LineEditor
 
         public CanvasShape BoundsCanvas { get; set; }
 
-        public SelectionEditor SelectionEditor { get; set; }
+        public SelectionTool SelectionTool { get; set; }
 
-        public LineEditor LineEditor { get; set; }
+        public LineTool LineTool { get; set; }
 
         public void ToggleSnap()
         {
@@ -1063,12 +1063,12 @@ namespace LineEditor
 
             ObserveInput(_canvasViewModel.DrawingCanvas, boundsRenderCanvas);
 
-            _canvasViewModel.SelectionEditor = new SelectionEditor(_canvasViewModel.DrawingCanvas, _canvasViewModel.BoundsCanvas)
+            _canvasViewModel.SelectionTool = new SelectionTool(_canvasViewModel.DrawingCanvas, _canvasViewModel.BoundsCanvas)
             {
                 IsEnabled = false
             };
 
-            _canvasViewModel.LineEditor = new LineEditor(_canvasViewModel.DrawingCanvas, _canvasViewModel.BoundsCanvas)
+            _canvasViewModel.LineTool = new LineTool(_canvasViewModel.DrawingCanvas, _canvasViewModel.BoundsCanvas)
             {
                 IsEnabled = true
             };
@@ -1148,12 +1148,12 @@ namespace LineEditor
             switch (e.Key)
             {
                 case Key.S:
-                    _canvasViewModel.LineEditor.IsEnabled = false;
-                    _canvasViewModel.SelectionEditor.IsEnabled = true;
+                    _canvasViewModel.LineTool.IsEnabled = false;
+                    _canvasViewModel.SelectionTool.IsEnabled = true;
                     break;
                 case Key.L:
-                    _canvasViewModel.LineEditor.IsEnabled = true;
-                    _canvasViewModel.SelectionEditor.IsEnabled = false;
+                    _canvasViewModel.LineTool.IsEnabled = true;
+                    _canvasViewModel.SelectionTool.IsEnabled = false;
                     break;
                 case Key.G:
                     _canvasViewModel.ToggleSnap();
