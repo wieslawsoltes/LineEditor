@@ -260,25 +260,18 @@ namespace LineEditor
             return polygon;
         }
 
-        private void UpdatePoints(PointShape center, PolygonShape polygonShape, double thickness)
+        private void ExpandPoint(PointShape point, PolygonShape polygonShape, double thickness)
         {
-            var x = center.X - (thickness / 2.0);
-            var y = center.Y - (thickness / 2.0);
-
-            var width = thickness;
-            var height = thickness;
-
+            var x = point.X - (thickness / 2.0);
+            var y = point.Y - (thickness / 2.0);
             polygonShape.Points[0].X = x;
             polygonShape.Points[0].Y = y;
-
-            polygonShape.Points[1].X = x + width;
+            polygonShape.Points[1].X = x + thickness;
             polygonShape.Points[1].Y = y;
-
-            polygonShape.Points[2].X = x + width;
-            polygonShape.Points[2].Y = y + height;
-
+            polygonShape.Points[2].X = x + thickness;
+            polygonShape.Points[2].Y = y + thickness;
             polygonShape.Points[3].X = x;
-            polygonShape.Points[3].Y = y + height;
+            polygonShape.Points[3].Y = y + thickness;
         }
 
         private double Angle(PointShape point0, PointShape point1)
@@ -286,31 +279,30 @@ namespace LineEditor
             return Math.Atan2(point0.Y - point1.Y, point0.X - point1.X);
         }
 
-        private void RotatePoint(PointShape point, double radians, double centerX, double centerY)
+        private void Rotate(PointShape point, double radians, PointShape center)
         {
-            var x = (point.X - centerX) * Math.Cos(radians) - (point.Y - centerY) * Math.Sin(radians) + centerX;
-            var y = (point.X - centerX) * Math.Sin(radians) + (point.Y - centerY) * Math.Cos(radians) + centerY;
+            var x = (point.X - center.X) * Math.Cos(radians) - (point.Y - center.Y) * Math.Sin(radians) + center.X;
+            var y = (point.X - center.X) * Math.Sin(radians) + (point.Y - center.Y) * Math.Cos(radians) + center.Y;
             point.X = x;
             point.Y = y;
         }
 
-        private void RotatePoints(PointShape center, PolygonShape polygonShape, double radians)
-        {
-            RotatePoint(polygonShape.Points[0], radians, center.X, center.Y);
-            RotatePoint(polygonShape.Points[1], radians, center.X, center.Y);
-            RotatePoint(polygonShape.Points[2], radians, center.X, center.Y);
-            RotatePoint(polygonShape.Points[3], radians, center.X, center.Y);
-        }
-
         public void Update()
         {
-            UpdatePoints(_lineShape.Point1, _point1Polygon, _lineShape.StrokeThickness);
-            UpdatePoints(_lineShape.Point2, _point2Polygon, _lineShape.StrokeThickness);
+            ExpandPoint(_lineShape.Point1, _point1Polygon, _lineShape.StrokeThickness);
+            ExpandPoint(_lineShape.Point2, _point2Polygon, _lineShape.StrokeThickness);
 
             var radians = Angle(_lineShape.Point1, _lineShape.Point2);
 
-            RotatePoints(_lineShape.Point1, _point1Polygon, radians);
-            RotatePoints(_lineShape.Point2, _point2Polygon, radians);
+            Rotate(_point1Polygon.Points[0], radians, _lineShape.Point1);
+            Rotate(_point1Polygon.Points[1], radians, _lineShape.Point1);
+            Rotate(_point1Polygon.Points[2], radians, _lineShape.Point1);
+            Rotate(_point1Polygon.Points[3], radians, _lineShape.Point1);
+
+            Rotate(_point2Polygon.Points[0], radians, _lineShape.Point2);
+            Rotate(_point2Polygon.Points[1], radians, _lineShape.Point2);
+            Rotate(_point2Polygon.Points[2], radians, _lineShape.Point2);
+            Rotate(_point2Polygon.Points[3], radians, _lineShape.Point2);
 
             _linePolygon.Points[0].X = _point1Polygon.Points[1].X;
             _linePolygon.Points[0].Y = _point1Polygon.Points[1].Y;
