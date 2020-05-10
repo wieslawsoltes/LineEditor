@@ -118,6 +118,25 @@ namespace LineEditor
         }
     }
 
+    public class RectangleShape : BaseShape
+    {
+        public PointShape TopLeft { get; set; }
+
+        public PointShape BottomRight { get; set; }
+
+        public ArgbColor Stroke { get; set; }
+
+        public double StrokeThickness { get; set; }
+
+        public RectangleShape()
+        {
+            TopLeft = new PointShape(0.0, 0.0);
+            BottomRight = new PointShape(0.0, 0.0);
+            Stroke = new ArgbColor(0xFF, 0x00, 0xBF, 0xFF);
+            StrokeThickness = 2.0;
+        }
+    }
+
     public class PolygonShape : BaseShape
     {
         public PointShape[] Points { get; set; }
@@ -210,16 +229,18 @@ namespace LineEditor
         private PolygonShape _linePolygon;
         private PolygonShape _point1Polygon;
         private PolygonShape _point2Polygon;
+        private RectangleShape _rectangleShape;
         private bool _isVisible;
 
-        public LineBounds(CanvasShape canvasShape, LineShape line)
+        public LineBounds(CanvasShape canvasShape, LineShape lineShape)
         {
-            _lineShape = line;
+            _lineShape = lineShape;
             _canvasShape = canvasShape;
             _hitResult = HitResult.None;
             _linePolygon = CreatePolygon(4);
             _point1Polygon = CreatePolygon(4);
             _point2Polygon = CreatePolygon(4);
+            _rectangleShape = new RectangleShape();
         }
 
         private PolygonShape CreatePolygon(int count)
@@ -299,6 +320,24 @@ namespace LineEditor
             _linePolygon.Points[2].Y = _point2Polygon.Points[3].Y;
             _linePolygon.Points[3].X = _point2Polygon.Points[0].X;
             _linePolygon.Points[3].Y = _point2Polygon.Points[0].Y;
+
+            double tlx = double.MaxValue;
+            double tly = double.MaxValue;
+            double brx = double.MinValue;
+            double bry = double.MinValue;
+
+            foreach (var point in _linePolygon.Points)
+            {
+                tlx = Math.Min(tlx, point.X);
+                tly = Math.Min(tly, point.Y);
+                brx = Math.Max(brx, point.X);
+                bry = Math.Max(bry, point.Y);
+            }
+
+            _rectangleShape.TopLeft.X = tlx;
+            _rectangleShape.TopLeft.Y = tly;
+            _rectangleShape.BottomRight.X = brx;
+            _rectangleShape.BottomRight.Y = bry;
         }
 
         public bool IsVisible()
@@ -311,10 +350,9 @@ namespace LineEditor
             if (!_isVisible)
             {
                 _canvasShape.Children.Add(_linePolygon);
-#if true
                 _canvasShape.Children.Add(_point1Polygon);
                 _canvasShape.Children.Add(_point2Polygon);
-#endif
+                _canvasShape.Children.Add(_rectangleShape);
                 _isVisible = true;
             }
         }
@@ -324,10 +362,9 @@ namespace LineEditor
             if (_isVisible)
             {
                 _canvasShape.Children.Remove(_linePolygon);
-#if true
                 _canvasShape.Children.Remove(_point1Polygon);
                 _canvasShape.Children.Remove(_point2Polygon);
-#endif
+                _canvasShape.Children.Remove(_rectangleShape);
                 _isVisible = false;
             }
         }
@@ -731,6 +768,75 @@ namespace LineEditor
         }
     }
 
+    public class RectangleTool : IDisposable
+    {
+        private enum State { None, TopLeft, BottomRight }
+        private State _state = State.None;
+        private CanvasShape _drawingCanvas;
+        private CanvasShape _boundsCanvas;
+        private RectangleShape _rectangleShape;
+        private IDisposable _downs;
+        private IDisposable _drags;
+
+        public bool IsEnabled { get; set; }
+
+        public RectangleTool(CanvasShape drawingCanvas, CanvasShape boundsCanvas)
+        {
+            _drawingCanvas = drawingCanvas;
+            _boundsCanvas = boundsCanvas;
+
+            var moves = _drawingCanvas.Moves.Where(_ => _drawingCanvas.IsCaptured?.Invoke() == true);
+            var drags = Observable.Merge(_drawingCanvas.Downs, _drawingCanvas.Ups, moves);
+
+            _downs = _drawingCanvas.Downs.Where(_ => IsEnabled).Subscribe(p =>
+            {
+                if (_drawingCanvas.IsCaptured?.Invoke() == true)
+                {
+                    //_rectangleShape.Bounds.Hide();
+                    _drawingCanvas.InvalidateShape?.Invoke();
+                    _boundsCanvas.InvalidateShape?.Invoke();
+                    _state = State.None;
+                    _drawingCanvas.ReleaseCapture?.Invoke();
+                }
+                else
+                {
+                    _rectangleShape = new RectangleShape();
+                    _rectangleShape.TopLeft.X = p.X;
+                    _rectangleShape.TopLeft.Y = p.Y;
+                    _rectangleShape.BottomRight.X = p.X;
+                    _rectangleShape.BottomRight.Y = p.Y;
+
+                    _drawingCanvas.Children.Add(_rectangleShape);
+                    //_rectangleShape.Bounds = new RectangleBounds(_boundsCanvas, _rectangleShape);
+                    //_rectangleShape.Bounds.Update();
+                    //_rectangleShape.Bounds.Show();
+                    _drawingCanvas.Capture?.Invoke();
+                    _drawingCanvas.InvalidateShape?.Invoke();
+                    _boundsCanvas.InvalidateShape?.Invoke();
+                    _state = State.BottomRight;
+                }
+            });
+
+            _drags = drags.Where(_ => IsEnabled).Subscribe(p =>
+            {
+                if (_state == State.BottomRight)
+                {
+                    _rectangleShape.BottomRight.X = p.X;
+                    _rectangleShape.BottomRight.Y = p.Y;
+                    //_rectangleShape.Bounds.Update();
+                    _drawingCanvas.InvalidateShape?.Invoke();
+                    _boundsCanvas.InvalidateShape?.Invoke();
+                }
+            });
+        }
+
+        public void Dispose()
+        {
+            _downs.Dispose();
+            _drags.Dispose();
+        }
+    }
+
     public class CanvasViewModel
     {
         public CanvasShape BackgroundCanvas { get; set; }
@@ -742,6 +848,8 @@ namespace LineEditor
         public SelectionTool SelectionTool { get; set; }
 
         public LineTool LineTool { get; set; }
+
+        public RectangleTool RectangleTool { get; set; }
 
         public void ToggleSnap()
         {
@@ -943,6 +1051,28 @@ namespace LineEditor
             dc.DrawLine(pen, point0, point1);
         }
 
+        public void DrawRectangle(DrawingContext dc, RectangleShape rectangleShape)
+        {
+            var brush = new SolidColorBrush(ToColor(rectangleShape.Stroke));
+            brush.Freeze();
+
+            var pen = new Pen(brush, rectangleShape.StrokeThickness)
+            {
+                Brush = brush,
+                Thickness = rectangleShape.StrokeThickness,
+                StartLineCap = PenLineCap.Round,
+                EndLineCap = PenLineCap.Round,
+            };
+            pen.Freeze();
+
+            var point1 = new Point(rectangleShape.TopLeft.X, rectangleShape.TopLeft.Y);
+            var point2 = new Point(rectangleShape.BottomRight.X, rectangleShape.BottomRight.Y);
+
+            var rectangle = new Rect(point1, point2);
+
+            dc.DrawRectangle(null, pen, rectangle);
+        }
+
         public void DrawPolygon(DrawingContext dc, PolygonShape polygonShape)
         {
             var brush = new SolidColorBrush(ToColor(polygonShape.Stroke));
@@ -988,6 +1118,10 @@ namespace LineEditor
                 if (shape is LineShape lineShape)
                 {
                     DrawLine(dc, lineShape);
+                }
+                else if (shape is RectangleShape rectangleShape)
+                {
+                    DrawRectangle(dc, rectangleShape);
                 }
                 else if (shape is PolygonShape polygonShape)
                 {
@@ -1072,6 +1206,11 @@ namespace LineEditor
             {
                 IsEnabled = true
             };
+
+            _canvasViewModel.RectangleTool = new RectangleTool(_canvasViewModel.DrawingCanvas, _canvasViewModel.BoundsCanvas)
+            {
+                IsEnabled = false
+            };
         }
 
         private void ObserveInput(CanvasShape canvasShape, UIElement target)
@@ -1149,10 +1288,17 @@ namespace LineEditor
             {
                 case Key.S:
                     _canvasViewModel.LineTool.IsEnabled = false;
+                    _canvasViewModel.RectangleTool.IsEnabled = false;
                     _canvasViewModel.SelectionTool.IsEnabled = true;
                     break;
                 case Key.L:
                     _canvasViewModel.LineTool.IsEnabled = true;
+                    _canvasViewModel.RectangleTool.IsEnabled = false;
+                    _canvasViewModel.SelectionTool.IsEnabled = false;
+                    break;
+                case Key.R:
+                    _canvasViewModel.LineTool.IsEnabled = false;
+                    _canvasViewModel.RectangleTool.IsEnabled = true;
                     _canvasViewModel.SelectionTool.IsEnabled = false;
                     break;
                 case Key.G:
