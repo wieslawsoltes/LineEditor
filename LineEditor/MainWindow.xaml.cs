@@ -349,9 +349,11 @@ namespace LineEditor
         {
             if (!_isVisible)
             {
-                //_canvasShape.Children.Add(_linePolygon);
-                //_canvasShape.Children.Add(_point1Polygon);
-                //_canvasShape.Children.Add(_point2Polygon);
+#if true
+                _canvasShape.Children.Add(_linePolygon);
+                _canvasShape.Children.Add(_point1Polygon);
+                _canvasShape.Children.Add(_point2Polygon); 
+#endif
                 _canvasShape.Children.Add(_rectangleShape);
                 _isVisible = true;
             }
@@ -361,9 +363,11 @@ namespace LineEditor
         {
             if (_isVisible)
             {
-                //_canvasShape.Children.Remove(_linePolygon);
-                //_canvasShape.Children.Remove(_point1Polygon);
-                //_canvasShape.Children.Remove(_point2Polygon);
+#if true
+                _canvasShape.Children.Remove(_linePolygon);
+                _canvasShape.Children.Remove(_point1Polygon);
+                _canvasShape.Children.Remove(_point2Polygon); 
+#endif
                 _canvasShape.Children.Remove(_rectangleShape);
                 _isVisible = false;
             }
