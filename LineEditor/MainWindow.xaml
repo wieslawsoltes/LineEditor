@@ -28,7 +28,7 @@
             <ListBox x:Name="children" Grid.Row="0" ItemsSource="{Binding DrawingCanvas.Children}" HorizontalContentAlignment="Stretch" BorderBrush="{x:Null}" BorderThickness="0" FocusVisualStyle="{x:Null}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="LineShape"/>
+                        <TextBlock Text="{Binding}"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
