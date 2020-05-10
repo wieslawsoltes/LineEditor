@@ -1,0 +1,87 @@
+﻿<Window x:Class="LineEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:LineEditor"
+        Title="LineEditor" Height="700" Width="920"
+        Background="White"
+        WindowStartupLocation="CenterScreen"
+        UseLayoutRounding="False" SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Ideal" TextOptions.TextHintingMode="Auto" TextOptions.TextRenderingMode="ClearType">
+    <Window.Resources>
+        <ObjectDataProvider x:Key="LineCapValues" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:LineCap"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ListBox x:Name="children" Grid.Row="0" ItemsSource="{Binding DrawingCanvas.Children}" HorizontalContentAlignment="Stretch" BorderBrush="{x:Null}" BorderThickness="0" FocusVisualStyle="{x:Null}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="LineShape"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <ContentControl Content="{Binding FallbackValue={x:Null}}"  Grid.Row="1" DataContext="{Binding ElementName=children, Path=SelectedItem}">
+                <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type local:LineShape}">
+                        <Grid Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Column="0" Grid.Row="0" Text="Point1.X" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Point1.X}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="1" Text="Point1.Y" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Point1.Y}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="2" Text="Point2.X" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Point2.X}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="3" Text="Point2.Y" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Point2.Y}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="4" Text="Stroke.A" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding Stroke.A}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="5" Text="Stroke.R" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding Stroke.R}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="6" Text="Stroke.G" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding Stroke.G}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="7" Text="Stroke.B" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="7" Text="{Binding Stroke.B}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="8" Text="StrokeThickness" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="8" Text="{Binding StrokeThickness}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="9" Text="StartLineCap" Margin="1,1,4,1"/>
+                            <ComboBox Grid.Column="1" Grid.Row="9" ItemsSource="{Binding Source={StaticResource LineCapValues}}" SelectedItem="{Binding Path=StartLineCap}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="10" Text="EndLineCap" Margin="1,1,4,1"/>
+                            <ComboBox Grid.Column="1" Grid.Row="10" ItemsSource="{Binding Source={StaticResource LineCapValues}}" SelectedItem="{Binding Path=EndLineCap}" Margin="1"/>
+                        </Grid>
+                    </DataTemplate>
+                </ContentControl.Resources>
+            </ContentControl>
+        </Grid>
+        <local:PanAndZoomBorder ClipToBounds="True" Background="Transparent" Grid.Column="1">
+            <Grid x:Name="layout" Focusable="True" FocusVisualStyle="{x:Null}"/>
+        </local:PanAndZoomBorder>
+    </Grid>
+</Window>
