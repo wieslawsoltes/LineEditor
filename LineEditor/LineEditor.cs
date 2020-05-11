@@ -42,8 +42,7 @@ namespace LineEditor
     {
         Flat = 0,
         Square = 1,
-        Round = 2,
-        Triangle = 3
+        Round = 2
     }
 
     public interface IBounds
@@ -99,9 +98,7 @@ namespace LineEditor
 
         public double StrokeThickness { get; set; }
 
-        public LineCap StartLineCap { get; set; }
-
-        public LineCap EndLineCap { get; set; }
+        public LineCap LineCap { get; set; }
 
         public LineShape()
         {
@@ -109,8 +106,7 @@ namespace LineEditor
             Point2 = new PointShape(0.0, 0.0);
             Stroke = new ArgbColor(0xFF, 0x00, 0x00, 0x00);
             StrokeThickness = 30.0;
-            StartLineCap = LineCap.Square;
-            EndLineCap = LineCap.Square;
+            LineCap = LineCap.Square;
         }
     }
 
@@ -141,16 +137,13 @@ namespace LineEditor
 
         public double StrokeThickness { get; set; }
 
-        public LineCap StartLineCap { get; set; }
-
-        public LineCap EndLineCap { get; set; }
+        public LineCap LineCap { get; set; }
 
         public PolygonShape()
         {
             Stroke = new ArgbColor(0xFF, 0x00, 0xBF, 0xFF);
             StrokeThickness = 2.0;
-            StartLineCap = LineCap.Round;
-            EndLineCap = LineCap.Round;
+            LineCap = LineCap.Round;
         }
 
         public bool Contains(double x, double y)

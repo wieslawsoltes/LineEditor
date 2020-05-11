@@ -44,7 +44,6 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                                 <RowDefinition/>
-                                <RowDefinition/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Column="0" Grid.Row="0" Text="Point1.X" Margin="1,1,4,1"/>
                             <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Point1.X}" Margin="1"/>
@@ -65,9 +64,7 @@
                             <TextBlock Grid.Column="0" Grid.Row="8" Text="StrokeThickness" Margin="1,1,4,1"/>
                             <TextBox Grid.Column="1" Grid.Row="8" Text="{Binding StrokeThickness}" Margin="1"/>
                             <TextBlock Grid.Column="0" Grid.Row="9" Text="StartLineCap" Margin="1,1,4,1"/>
-                            <ComboBox Grid.Column="1" Grid.Row="9" ItemsSource="{Binding Source={local:EnumBindingSource {x:Type model:LineCap}}}" SelectedItem="{Binding Path=StartLineCap}" Margin="1"/>
-                            <TextBlock Grid.Column="0" Grid.Row="10" Text="EndLineCap" Margin="1,1,4,1"/>
-                            <ComboBox Grid.Column="1" Grid.Row="10" ItemsSource="{Binding Source={local:EnumBindingSource {x:Type model:LineCap}}}" SelectedItem="{Binding Path=EndLineCap}" Margin="1"/>
+                            <ComboBox Grid.Column="1" Grid.Row="9" ItemsSource="{Binding Source={local:EnumBindingSource {x:Type model:LineCap}}}" SelectedItem="{Binding Path=LineCap}" Margin="1"/>
                         </Grid>
                     </DataTemplate>
                 </ContentControl.Resources>

@@ -84,7 +84,7 @@ namespace LineEditor.Avalonia
         {
             this.GetObservable(ChildProperty).Subscribe((value) =>
             {
-                if (value != null && value != Child)
+                if (value != null && value != _child)
                 {
                     _child = value;
                     if (_initialize)
@@ -125,8 +125,8 @@ namespace LineEditor.Avalonia
             {
                 var st = GetScaleTransform(_child);
                 var tt = GetTranslateTransform(_child);
-                double zoom = e.Delta.X > 0 ? .2 : -.2;
-                if (!(e.Delta.X > 0) && (st.ScaleX < .4 || st.ScaleY < .4))
+                double zoom = e.Delta.Y > 0 ? .2 : -.2;
+                if (!(e.Delta.Y > 0) && (st.ScaleX < .4 || st.ScaleY < .4))
                     return;
                 Point relative = e.GetPosition(_child);
                 double abosuluteX = relative.X * st.ScaleX + tt.X;
@@ -216,7 +216,7 @@ namespace LineEditor.Avalonia
             {
                 Brush = brush,
                 Thickness = lineShape.StrokeThickness,
-                LineCap = ToPenLineCap(lineShape.StartLineCap)
+                LineCap = ToPenLineCap(lineShape.LineCap)
             };
 
             var point0 = new Point(lineShape.Point1.X, lineShape.Point1.Y);
@@ -262,7 +262,7 @@ namespace LineEditor.Avalonia
             {
                 Brush = brush,
                 Thickness = polygonShape.StrokeThickness,
-                LineCap = ToPenLineCap(polygonShape.StartLineCap)
+                LineCap = ToPenLineCap(polygonShape.LineCap)
             };
 
             var points = polygonShape.Points;

@@ -194,8 +194,6 @@ namespace LineEditor.Wpf
                     return PenLineCap.Square;
                 case LineCap.Round:
                     return PenLineCap.Round;
-                case LineCap.Triangle:
-                    return PenLineCap.Triangle;
             }
         }
 
@@ -218,8 +216,8 @@ namespace LineEditor.Wpf
             {
                 Brush = brush,
                 Thickness = lineShape.StrokeThickness,
-                StartLineCap = ToPenLineCap(lineShape.StartLineCap),
-                EndLineCap = ToPenLineCap(lineShape.EndLineCap)
+                StartLineCap = ToPenLineCap(lineShape.LineCap),
+                EndLineCap = ToPenLineCap(lineShape.LineCap)
             };
             pen.Freeze();
 
@@ -270,8 +268,8 @@ namespace LineEditor.Wpf
             {
                 Brush = brush,
                 Thickness = polygonShape.StrokeThickness,
-                StartLineCap = ToPenLineCap(polygonShape.StartLineCap),
-                EndLineCap = ToPenLineCap(polygonShape.EndLineCap)
+                StartLineCap = ToPenLineCap(polygonShape.LineCap),
+                EndLineCap = ToPenLineCap(polygonShape.LineCap)
             };
             pen.Freeze();
 
