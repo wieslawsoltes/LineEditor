@@ -64,6 +64,7 @@ namespace LineEditor.Wpf
 
     public class PanAndZoomBorder : Border
     {
+        private bool _isCaptured = false;
         private bool _initialize = true;
         private UIElement _child = null;
         private Point _origin;
@@ -149,6 +150,7 @@ namespace LineEditor.Wpf
                 _origin = new Point(tt.X, tt.Y);
                 Cursor = Cursors.Hand;
                 _child.CaptureMouse();
+                _isCaptured = true;
             }
         }
 
@@ -157,13 +159,14 @@ namespace LineEditor.Wpf
             if (_initialize == false && _child != null)
             {
                 _child.ReleaseMouseCapture();
+                _isCaptured = false;
                 Cursor = Cursors.Arrow;
             }
         }
 
         private void Border_MouseMove(object sender, MouseEventArgs e)
         {
-            if (_initialize == false && _child != null && _child.IsMouseCaptured)
+            if (_initialize == false && _child != null && _isCaptured /*_child.IsMouseCaptured*/)
             {
                 var tt = GetTranslateTransform(_child);
                 Vector v = _start - e.GetPosition(this);
