@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace LineEditor
+namespace LineEditor.Wpf
 {
     public partial class App : Application
     {

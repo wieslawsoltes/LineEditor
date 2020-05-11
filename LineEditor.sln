@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LineEditor", "LineEditor\LineEditor.csproj", "{B19012AC-AF09-498C-A424-8AC01FE8623E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LineEditor.Avalonia", "LineEditor.Avalonia\LineEditor.Avalonia.csproj", "{E81302B8-0AB5-48B8-AE8C-EB1EBB185F2A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LineEditor.Wpf", "LineEditor.Wpf\LineEditor.Wpf.csproj", "{D7619B0B-5941-4929-AEE6-41096717389A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LineEditor", "LineEditor\LineEditor.csproj", "{8B73035E-EB7D-496B-9398-EC16AC1BFFDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,9 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B19012AC-AF09-498C-A424-8AC01FE8623E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B19012AC-AF09-498C-A424-8AC01FE8623E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B19012AC-AF09-498C-A424-8AC01FE8623E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E81302B8-0AB5-48B8-AE8C-EB1EBB185F2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E81302B8-0AB5-48B8-AE8C-EB1EBB185F2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E81302B8-0AB5-48B8-AE8C-EB1EBB185F2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E81302B8-0AB5-48B8-AE8C-EB1EBB185F2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7619B0B-5941-4929-AEE6-41096717389A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7619B0B-5941-4929-AEE6-41096717389A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7619B0B-5941-4929-AEE6-41096717389A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7619B0B-5941-4929-AEE6-41096717389A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B73035E-EB7D-496B-9398-EC16AC1BFFDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B73035E-EB7D-496B-9398-EC16AC1BFFDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B73035E-EB7D-496B-9398-EC16AC1BFFDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B73035E-EB7D-496B-9398-EC16AC1BFFDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

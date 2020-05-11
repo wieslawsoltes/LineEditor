@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Update="**\*.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <AvaloniaResource Include="**\*.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Reactive" Version="4.4.1" />
+    <PackageReference Include="Avalonia" Version="0.9.999-cibuild*" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.9.999-cibuild*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LineEditor\LineEditor.csproj" />
+  </ItemGroup>
+
+</Project>

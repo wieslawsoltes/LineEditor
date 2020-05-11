@@ -1,0 +1,79 @@
+﻿<Window x:Class="LineEditor.Avalonia.MainWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:LineEditor.Avalonia"
+        xmlns:model="clr-namespace:LineEditor;assembly=LineEditor"
+        Title="LineEditor.Avalonia" Height="700" Width="920"
+        Background="White"
+        WindowStartupLocation="CenterScreen"
+        UseLayoutRounding="False">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ListBox x:Name="children" Grid.Row="0" Items="{Binding DrawingCanvas.Children}" BorderBrush="{x:Null}" BorderThickness="0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <ContentControl Content="{Binding FallbackValue={x:Null}}" Grid.Row="1" DataContext="{Binding ElementName=children, Path=SelectedItem}">
+                <ContentControl.DataTemplates>
+                    <DataTemplate DataType="{x:Type model:LineShape}">
+                        <Grid Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Column="0" Grid.Row="0" Text="Point1.X" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Point1.X}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="1" Text="Point1.Y" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Point1.Y}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="2" Text="Point2.X" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Point2.X}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="3" Text="Point2.Y" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Point2.Y}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="4" Text="Stroke.A" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding Stroke.A}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="5" Text="Stroke.R" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding Stroke.R}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="6" Text="Stroke.G" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding Stroke.G}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="7" Text="Stroke.B" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="7" Text="{Binding Stroke.B}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="8" Text="StrokeThickness" Margin="1,1,4,1"/>
+                            <TextBox Grid.Column="1" Grid.Row="8" Text="{Binding StrokeThickness}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="9" Text="StartLineCap" Margin="1,1,4,1"/>
+                            <ComboBox Grid.Column="1" Grid.Row="9" Items="{Binding Source={local:EnumBindingSource {x:Type model:LineCap}}}" SelectedItem="{Binding Path=StartLineCap}" Margin="1"/>
+                            <TextBlock Grid.Column="0" Grid.Row="10" Text="EndLineCap" Margin="1,1,4,1"/>
+                            <ComboBox Grid.Column="1" Grid.Row="10" Items="{Binding Source={local:EnumBindingSource {x:Type model:LineCap}}}" SelectedItem="{Binding Path=EndLineCap}" Margin="1"/>
+                        </Grid>
+                    </DataTemplate>
+                </ContentControl.DataTemplates>
+            </ContentControl>
+        </Grid>
+        <local:PanAndZoomBorder ClipToBounds="True" Background="Transparent" Grid.Column="1">
+            <Grid x:Name="layout" Background="Transparent" Focusable="True"/>
+        </local:PanAndZoomBorder>
+    </Grid>
+</Window>
