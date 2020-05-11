@@ -132,7 +132,7 @@ namespace LineEditor
         {
             TopLeft = new PointShape(0.0, 0.0);
             BottomRight = new PointShape(0.0, 0.0);
-            Stroke = new ArgbColor(0xFF, 0x00, 0xBF, 0xFF);
+            Stroke = new ArgbColor(0xFF, 0xBF, 0x00, 0xFF);
             StrokeThickness = 2.0;
         }
     }
