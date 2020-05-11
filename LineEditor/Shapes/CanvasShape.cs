@@ -38,8 +38,7 @@ namespace LineEditor
         {
             Width = 600.0;
             Height = 600.0;
-            //Background = new ArgbColor(0x00, 0xFF, 0xFF, 0xFF);
-            Background = null;
+            Background = null; //  = new ArgbColor(0x00, 0xFF, 0xFF, 0xFF);
             Children = new ObservableCollection<BaseShape>();
             SnapX = 15.0;
             SnapY = 15.0;
