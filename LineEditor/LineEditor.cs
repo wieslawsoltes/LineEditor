@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define DRAW_HITTEST
+#define DRAW_BOUNDS
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -331,12 +333,14 @@ namespace LineEditor
         {
             if (!_isVisible)
             {
-#if true
+#if DRAW_HITTEST
                 _canvasShape.Children.Add(_linePolygon);
                 _canvasShape.Children.Add(_point1Polygon);
                 _canvasShape.Children.Add(_point2Polygon);
 #endif
-                _canvasShape.Children.Add(_rectangleShape);
+#if DRAW_BOUNDS
+                _canvasShape.Children.Add(_rectangleShape); 
+#endif
                 _isVisible = true;
             }
         }
@@ -345,12 +349,14 @@ namespace LineEditor
         {
             if (_isVisible)
             {
-#if true
+#if DRAW_HITTEST
                 _canvasShape.Children.Remove(_linePolygon);
                 _canvasShape.Children.Remove(_point1Polygon);
                 _canvasShape.Children.Remove(_point2Polygon);
 #endif
-                _canvasShape.Children.Remove(_rectangleShape);
+#if DRAW_BOUNDS
+                _canvasShape.Children.Remove(_rectangleShape); 
+#endif
                 _isVisible = false;
             }
         }
